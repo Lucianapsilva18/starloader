@@ -1,0 +1,93 @@
+# Example pipeline over synthetic retail data (all names and codes are fake).
+# Run from the repository root:
+#   python -m starloader check examples/retail.toml
+#   python -m starloader run examples/retail.toml --effective 2026-03-01
+
+[warehouse]
+path = "retail.db"
+
+[date_dimension]
+start = "2026-01-01"
+end = "2026-12-31"
+
+[[dimensions]]
+name = "dim_store"
+source = "data/stores.csv"
+natural_key = ["store_code"]
+tracked = ["region", "format"]
+
+[dimensions.columns]
+store_code = "str"
+store_name = "str"
+region = "str"
+format = "str"
+opened_on = "date"
+
+[[dimensions.rules]]
+column = "store_code"
+rule = "unique"
+
+[[dimensions.rules]]
+column = "store_code"
+rule = "regex"
+value = "S[0-9]{3}"
+
+[[dimensions.rules]]
+column = "format"
+rule = "allowed"
+value = ["mall", "street", "kiosk"]
+
+[[dimensions]]
+name = "dim_product"
+source = "data/products.csv"
+natural_key = ["sku"]
+tracked = ["category"]
+
+[dimensions.columns]
+sku = "str"
+product_name = "str"
+category = "str"
+unit_price = "float"
+active = "bool"
+
+[[dimensions.rules]]
+column = "sku"
+rule = "unique"
+
+[[dimensions.rules]]
+column = "unit_price"
+rule = "min"
+value = 0
+
+[[facts]]
+name = "fact_sales"
+source = "data/sales.csv"
+watermark = "sold_at"
+measures = ["quantity", "net_amount", "discount"]
+
+[facts.lookups]
+store_code = "dim_store"
+sku = "dim_product"
+
+[facts.columns]
+order_id = "str"
+sold_at = "datetime"
+store_code = "str"
+sku = "str"
+quantity = "int"
+net_amount = "float"
+discount = "float"
+
+[[facts.rules]]
+column = "order_id"
+rule = "unique"
+
+[[facts.rules]]
+column = "quantity"
+rule = "min"
+value = 1
+
+[[facts.rules]]
+column = "discount"
+rule = "not_null"
+severity = "warn"
