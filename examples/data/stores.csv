@@ -1,0 +1,13 @@
+store_code,store_name,region,format,opened_on
+S001,Store 001,Norte,mall,2021-05-13
+S002,Store 002,Nordeste,mall,2021-02-18
+S003,Store 003,Norte,kiosk,2016-01-10
+S004,Store 004,Norte,mall,2013-09-19
+S005,Store 005,Norte,kiosk,2013-09-16
+S006,Store 006,Nordeste,street,2019-05-10
+S007,Store 007,Nordeste,kiosk,2016-06-14
+S008,Store 008,Nordeste,mall,2022-06-11
+S009,Store 009,Norte,street,2011-06-15
+S010,Store 010,Sul,street,2022-01-17
+S011,Store 011,Sul,mall,2016-02-18
+S012,Store 012,Centro-Oeste,kiosk,2019-06-19
